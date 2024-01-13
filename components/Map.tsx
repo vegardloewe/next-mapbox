@@ -7,6 +7,7 @@ mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 const Map = () => {
   const mapContainerRef = useRef(null);
   const map: MutableRefObject<null | MapboxMap> = useRef(null);
+  let previousFeatureId: number | null = null;
 
   useEffect(() => {
     if (mapContainerRef.current) {
@@ -31,7 +32,15 @@ const Map = () => {
           source: "solar", // reference the data source
           layout: {},
           paint: {
-            "fill-color": "#0080ff", // blue color fill
+            "fill-color": [
+              "coalesce",
+              [
+                "case",
+                ["all", ["boolean", ["feature-state", "selected"], false]],
+                "#FFA500",
+                "#0080ff",
+              ],
+            ],
             "fill-opacity": 0.5,
           },
         });
@@ -39,6 +48,7 @@ const Map = () => {
         map.current!.addControl(new mapboxgl.NavigationControl());
 
         map.current!.on("click", "solar_footprints", clickFeatures);
+        map.current!.on("click", clickMap);
       });
 
       return () => {
@@ -49,7 +59,8 @@ const Map = () => {
 
   const clickFeatures = useCallback((e) => {
     if (e.features) {
-      const coordinates = e.features[0].geometry.coordinates[0][0];
+      const featureId = e.features[0].id;
+      const coordinates = [e.lngLat.lng, e.lngLat.lat];
       const county = e.features[0].properties.COUNTYNAME;
       const size = e.features[0].properties.Acres;
       const type = e.features[0].properties.type;
@@ -57,6 +68,29 @@ const Map = () => {
       while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       }
+
+      // If there was a previously selected feature, set its selected state to false
+      if (previousFeatureId !== null) {
+        map.current!.setFeatureState(
+          {
+            source: "solar",
+            id: previousFeatureId,
+          },
+          { selected: false }
+        );
+      }
+
+      // Set the selected state of the new feature to true
+      map.current!.setFeatureState(
+        {
+          source: "solar",
+          id: featureId,
+        },
+        { selected: true }
+      );
+
+      // Update the previousFeatureId to the id of the new feature
+      previousFeatureId = featureId;
 
       new mapboxgl.Popup()
         .setLngLat(coordinates)
@@ -66,6 +100,25 @@ const Map = () => {
         .addTo(map.current!);
     }
   }, []);
+
+  // Resets selected features on click on map
+  const clickMap = useCallback(
+    (e: mapboxgl.MapLayerMouseEvent | mapboxgl.MapLayerTouchEvent) => {
+      const features = map.current!.queryRenderedFeatures(e.point);
+
+      if (features.length === 0 && previousFeatureId !== null) {
+        map.current!.setFeatureState(
+          {
+            source: "solar",
+            id: previousFeatureId,
+          },
+          { selected: false }
+        );
+        previousFeatureId = null;
+      }
+    },
+    []
+  );
 
   return (
     <div>
