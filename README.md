@@ -83,3 +83,25 @@ map.removeLayer("my-layer");
 This will remove the layer with the id my-layer from the map.
 
 For more details, refer to the official Mapbox GL documentation: https://docs.mapbox.com/mapbox-gl-js/api/map/#map#removelayer
+
+### How to use listeners in Mapbox GL
+
+You can add event listeners to your map by using the `on` method of the `map` object:
+
+```javascript
+map.on("click", "my-layer", (e) => {
+  // Handle click event
+});
+```
+
+This will add a click event listener to the layer with the id my-layer. The event handler function will be called whenever the user clicks on this layer.
+
+You can remove event listeners by using the off method of the map object:
+
+```javascript
+map.off("click", "my-layer");
+```
+
+This will remove the click event listener from the layer with the id my-layer.
+
+For more details, refer to the official Mapbox GL documentation: https://docs.mapbox.com/mapbox-gl-js/api/map/#map#on
