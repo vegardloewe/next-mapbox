@@ -105,3 +105,19 @@ map.off("click", "my-layer");
 This will remove the click event listener from the layer with the id my-layer.
 
 For more details, refer to the official Mapbox GL documentation: https://docs.mapbox.com/mapbox-gl-js/api/map/#map#on
+
+### Mapbox Examples
+
+Mapbox provides a variety of examples that demonstrate how to use the Mapbox GL JS library in your applications. These examples cover a wide range of topics, including how to add markers to your map, how to use Mapbox Studio styles, how to add a geocoder, and much more.
+
+Here are a few examples:
+
+- [Add a marker to your map](https://docs.mapbox.com/mapbox-gl-js/example/add-a-marker/): This example shows you how to add a marker to your map at a specific location.
+
+- [Use a custom style layer with a 3D model](https://docs.mapbox.com/mapbox-gl-js/example/add-3d-model/): This example demonstrates how to use a custom style layer to add a 3D model to your map.
+
+- [Add a geocoder](https://docs.mapbox.com/mapbox-gl-js/example/mapbox-gl-geocoder/): This example shows you how to add a geocoder, which lets users search for places and addresses, to your map.
+
+- [Show polygon information on click](https://docs.mapbox.com/mapbox-gl-js/example/polygon-popup-on-click/): This example demonstrates how to show a popup with information about a polygon when the user clicks on it.
+
+You can find more examples in the [Mapbox GL JS example gallery](https://docs.mapbox.com/mapbox-gl-js/example/). Each example includes a live demo and the source code, so you can see how it works and use it as a starting point for your own applications.
