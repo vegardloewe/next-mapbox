@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
-    "@types/mapbox-gl": "^2.7.3",
+    "@types/mapbox-gl": "^2.7.19",
     "mapbox-gl": "3.0.0-beta.5",
     "next": "12.2.0",
     "next-connect": "^0.13.0",
